@@ -1,15 +1,22 @@
 from pathlib import Path
-from decouple import config
+from dotenv import load_dotenv
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+dotenv_path = BASE_DIR / '.env'
+load_dotenv(dotenv_path, override=True)
 
-
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+
+# BOT configuration
+BOT_HOST = os.getenv('BOT_HOST')
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+BOT_WEBHOOK_URL = f"{BOT_HOST}/bot/webhook/{BOT_TOKEN.split(':', maxsplit=1)[0]}/updates"
 
 
 # Application definition
@@ -18,19 +25,8 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-
-    'bot',
 ]
-
-SITE_ID = 1
-
-# BOT configuration
-BOT_HOST = config('BOT_HOST')
-BOT_TOKEN = config('BOT_TOKEN')
-BOT_WEBHOOK_URL = f"{BOT_HOST}/bot/webhook/{BOT_TOKEN.split(':', maxsplit=1)[0]}/updates" # noqa
-
+ 
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
